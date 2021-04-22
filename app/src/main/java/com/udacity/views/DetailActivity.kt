@@ -6,12 +6,14 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import com.udacity.R
 import com.udacity.databinding.ContentDetailBinding
 import com.udacity.model.Download
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.activity_detail.toolbar
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_detail.*
 
 class DetailActivity : AppCompatActivity() {
 
@@ -23,7 +25,7 @@ class DetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_detail)
         setSupportActionBar(toolbar)
 
-        motionLayout = findViewById(R.id.detail_motionLayout)
+        motionLayout = ContentDetailBinding.bind(findViewById(R.id.contentDetail_fragment)).detailMotionLayout
 
         val obtainedData = intent.extras
 
@@ -34,30 +36,21 @@ class DetailActivity : AppCompatActivity() {
 
         fab.setOnClickListener {
             backButtonPressed = true
-            motionLayout?.transitionToStart()
-            Log.d("MOTION", "EXECUTED")
+            motionLayout.transitionToStart()
         }
 
-        motionLayout?.setTransitionListener(object : MotionLayout.TransitionListener{
-            override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
-                TODO("Not yet implemented")
-            }
+        motionLayout.setTransitionListener(object : MotionLayout.TransitionListener{
+            override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) { }
 
-            override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
-                TODO("Not yet implemented")
-            }
+            override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) { }
 
             override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
-                Log.d("MOTION", "INTRO")
                 if(backButtonPressed){
-                    Log.d("MOTION", "EXIT")
                     startActivity(Intent(application, MainActivity::class.java))
                 }
             }
 
-            override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
-                TODO("Not yet implemented")
-            }
+            override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) { }
         })
 
     }
