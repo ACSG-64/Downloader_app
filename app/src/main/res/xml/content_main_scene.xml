@@ -29,7 +29,8 @@
             android:id="@+id/custom_button"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            motion:layout_constraintTop_toBottomOf="parent" />
+            motion:layout_constraintTop_toBottomOf="parent"
+            motion:transitionEasing="accelerate" />
         <Constraint
             motion:layout_constraintEnd_toEndOf="parent"
             android:layout_width="0dp"
@@ -38,7 +39,8 @@
             android:id="@+id/packages_radioGroup"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
-            motion:layout_constraintBottom_toBottomOf="@+id/frameLayout2" />
+            motion:layout_constraintBottom_toBottomOf="@+id/frameLayout2"
+            motion:transitionEasing="accelerate" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
@@ -51,7 +53,8 @@
             android:id="@+id/custom_button"
             android:layout_marginStart="20dp"
             android:layout_marginBottom="20dp"
-            android:layout_marginEnd="20dp" />
+            android:layout_marginEnd="20dp"
+            motion:transitionEasing="decelerate" />
         <Constraint
             motion:layout_constraintEnd_toEndOf="parent"
             android:layout_width="0dp"
@@ -61,6 +64,16 @@
             motion:layout_constraintStart_toStartOf="parent"
             android:id="@+id/packages_radioGroup"
             android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp" />
+            android:layout_marginEnd="20dp"
+            motion:transitionEasing="decelerate" />
+        <Constraint
+            android:id="@+id/imageView2"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="200dp"
+            android:layout_height="110dp"
+            motion:layout_constraintBottom_toBottomOf="@+id/frameLayout2"
+            motion:layout_constraintTop_toTopOf="@+id/frameLayout2"
+            motion:layout_constraintStart_toStartOf="@+id/frameLayout2"
+            motion:transitionEasing="decelerate" />
     </ConstraintSet>
 </MotionScene>
