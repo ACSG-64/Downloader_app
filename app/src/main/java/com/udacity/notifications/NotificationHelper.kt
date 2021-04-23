@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.udacity.R
@@ -15,8 +16,8 @@ import com.udacity.views.MainActivity
 
 class NotificationHelper(private val context: Context) {
 
-    private val CHANNEL_ID = "channelId"
-    private val NOTIFICATION_ID = 64
+    private val CHANNEL_ID = "downloadNotificationId"
+    private val NOTIFICATION_ID = 10
 
     fun createNotification(download: Download){
         createNotificationChannel()
@@ -26,11 +27,13 @@ class NotificationHelper(private val context: Context) {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK}
         val pendingIntentToMain = PendingIntent.getActivity(context, 0, intentToMain, 0)
 
+        Log.d("DOWN CONTENT", download.fullName)
         val intentToDetails = Intent(context, DetailActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK}
-        val pendingIntentToDetails = PendingIntent.getActivity(context, 0, intentToDetails, 0)
-        intentToDetails.putExtra("download_name", download.name)
-        intentToDetails.putExtra("download_status", download.status)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("download_name", download.fullName)
+            putExtra("download_status", download.status)
+        }
+        val pendingIntentToDetails = PendingIntent.getActivity(context, 0, intentToDetails, PendingIntent.FLAG_UPDATE_CURRENT)
 
         /* Notification */
         val notificationText : String =
