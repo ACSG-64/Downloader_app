@@ -45,6 +45,7 @@ class LoadingButton @JvmOverloads constructor( context: Context, attrs: Attribut
             }
             ButtonState.Completed -> {
                 buttonText = buttonTextDefault
+                valueAnimator.end()
                 radiusShape = 0f
                 fillShape = 0f
                 invalidate()
