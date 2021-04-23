@@ -27,11 +27,11 @@ class NotificationHelper(private val context: Context) {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK}
         val pendingIntentToMain = PendingIntent.getActivity(context, 0, intentToMain, 0)
 
-        Log.d("DOWN CONTENT", download.fullName)
         val intentToDetails = Intent(context, DetailActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra("download_name", download.fullName)
             putExtra("download_status", download.status)
+            putExtra("notification_id", NOTIFICATION_ID)
         }
         val pendingIntentToDetails = PendingIntent.getActivity(context, 0, intentToDetails, PendingIntent.FLAG_UPDATE_CURRENT)
 
@@ -48,14 +48,14 @@ class NotificationHelper(private val context: Context) {
             .setContentText(
                 notificationText.replace("{REPOSITORY}", download.name)
             )
-            .setContentIntent(pendingIntentToMain)
+            .setContentIntent(pendingIntentToDetails)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true)
             .addAction(
                 R.drawable.notification_icon,
                 context.getString(R.string.notification_button),
                 pendingIntentToDetails
             )
-            .setAutoCancel(true)
             .build()
 
         NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notification)

@@ -1,12 +1,13 @@
 package com.udacity.views
 
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import com.udacity.BR
 import com.udacity.R
 import com.udacity.databinding.ContentDetailBinding
@@ -28,12 +29,12 @@ class DetailActivity : AppCompatActivity() {
 
         motionLayout = ContentDetailBinding.bind(findViewById(R.id.contentDetail_fragment)).detailMotionLayout
 
-        Log.d("RECEIVED", intent.getStringExtra("download_name")!!)
+        cancelNotification(intent.getIntExtra("notification_id", 10))
 
         val bind = DataBindingUtil.getBinding<ContentDetailBinding>(contentDetail_fragment)
         bind?.setVariable(BR.file, Download(
-            fullName = intent.getStringExtra("download_name")!!,
-            status = intent.getBooleanExtra("download_status", false))
+                fullName = intent.getStringExtra("download_name")!!,
+                status = intent.getBooleanExtra("download_status", false))
         )
 
         fab.setOnClickListener {
@@ -41,20 +42,24 @@ class DetailActivity : AppCompatActivity() {
             motionLayout.transitionToStart()
         }
 
-        motionLayout.setTransitionListener(object : MotionLayout.TransitionListener{
-            override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) { }
+        motionLayout.setTransitionListener(object : MotionLayout.TransitionListener {
+            override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {}
 
-            override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) { }
+            override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {}
 
             override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
-                if(backButtonPressed){
+                if (backButtonPressed) {
                     startActivity(Intent(application, MainActivity::class.java))
                 }
             }
 
-            override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) { }
+            override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {}
         })
 
+    }
+
+    private fun cancelNotification(notificationId: Int) {
+        (applicationContext.getSystemService(Context.NOTIFICATION_SERVICE ) as NotificationManager).cancel(notificationId)
     }
 
 }
