@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import com.udacity.BR
 import com.udacity.R
 import com.udacity.databinding.ContentDetailBinding
 import com.udacity.model.Download
@@ -27,12 +28,13 @@ class DetailActivity : AppCompatActivity() {
 
         motionLayout = ContentDetailBinding.bind(findViewById(R.id.contentDetail_fragment)).detailMotionLayout
 
-        val obtainedData = intent.extras
+        Log.d("RECEIVED", intent.getStringExtra("download_name")!!)
 
-        val bind = DataBindingUtil.bind<ContentDetailBinding>(contentDetail_fragment)
-        bind?.file =  Download(
-            name = obtainedData?.getString("download_name")!!,
-            status = obtainedData.getBoolean("download_status"))
+        val bind = DataBindingUtil.getBinding<ContentDetailBinding>(contentDetail_fragment)
+        bind?.setVariable(BR.file, Download(
+            fullName = intent.getStringExtra("download_name")!!,
+            status = intent.getBooleanExtra("download_status", false))
+        )
 
         fab.setOnClickListener {
             backButtonPressed = true

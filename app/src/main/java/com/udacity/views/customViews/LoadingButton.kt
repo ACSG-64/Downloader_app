@@ -2,15 +2,18 @@ package com.udacity.views.customViews
 
 import android.animation.ValueAnimator
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.animation.LinearInterpolator
+import androidx.core.content.res.ResourcesCompat
 import com.udacity.R
 
 import kotlin.properties.Delegates
 
-class LoadingButton @JvmOverloads constructor( context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
+class LoadingButton @JvmOverloads constructor( context: Context, attrs: AttributeSet?, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
 
     private var widthSize = 0
     private var heightSize = 0
@@ -19,7 +22,6 @@ class LoadingButton @JvmOverloads constructor( context: Context, attrs: Attribut
     private var pen = Paint(Paint.ANTI_ALIAS_FLAG)
 
     private lateinit var valueAnimator : ValueAnimator
-    private var animatorDynamicValue = 0f
 
     private var radiusShape = 0f
     private var fillShape = 0f
@@ -31,12 +33,7 @@ class LoadingButton @JvmOverloads constructor( context: Context, attrs: Attribut
 
     private lateinit var rectArc : RectF
 
-    private val colors = mapOf<String, Int>(
-        "White" to Color.WHITE,
-        "Cyan" to  Color.rgb(0, 174, 172),
-        "Dark cyan" to Color.rgb(0, 61, 76),
-        "Light orange" to Color.rgb(255, 168, 30)
-    )
+    private var colorsPalette : MutableMap<String, Int> = mutableMapOf()
 
     var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
 
@@ -66,18 +63,34 @@ class LoadingButton @JvmOverloads constructor( context: Context, attrs: Attribut
 
     init {
         isClickable = true
+
+        val retrievedAttributes = context.obtainStyledAttributes(attrs, R.styleable.LoadingButton)
+        colorsPalette["Background"] = ResourcesCompat.getColor(resources,
+            retrievedAttributes.getResourceId(R.styleable.LoadingButton_backgroundColor, R.color.colorPrimary),
+            null)
+        colorsPalette["Loading bar"] = ResourcesCompat.getColor(resources,
+            retrievedAttributes.getResourceId(R.styleable.LoadingButton_loadingBarColor, R.color.colorPrimaryDark),
+            null)
+        colorsPalette["Circle"] = ResourcesCompat.getColor(resources,
+            retrievedAttributes.getResourceId(R.styleable.LoadingButton_circleColor, R.color.colorAccent),
+            null)
+        colorsPalette["Text"] = ResourcesCompat.getColor(resources,
+            retrievedAttributes.getResourceId(R.styleable.LoadingButton_textColor, R.color.white),
+            null)
+
+        retrievedAttributes.recycle()
     }
 
     override fun onDraw(canvas: Canvas?) {
         // Background
-        canvas?.drawColor(colors["Cyan"]!!)
+        canvas?.drawColor(colorsPalette["Background"]!!)
 
-        // Fill
-        brush.color = colors["Dark cyan"]!!
+        // Loading bar
+        brush.color = colorsPalette["Loading bar"]!!
         canvas?.drawRect(0f, 0f, fillShape, measuredHeight.toFloat(), brush)
 
         // Text
-        pen.color = colors["White"]!!
+        pen.color = colorsPalette["Text"]!!
         pen.textSize = 80f
         pen.textAlign = Paint.Align.CENTER
         canvas?.drawText(buttonText, measuredWidth/2f,
@@ -85,7 +98,7 @@ class LoadingButton @JvmOverloads constructor( context: Context, attrs: Attribut
             pen)
 
         // Circle
-        brush.color = colors["Light orange"]!!
+        brush.color = colorsPalette["Circle"]!!
         canvas?.drawArc(rectArc, 0f, fillShape, true, brush)
 
         canvas?.save()

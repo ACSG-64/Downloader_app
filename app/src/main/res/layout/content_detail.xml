@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.udacity.R"/>
         <variable
             name="file"
             type="com.udacity.model.Download"/>
@@ -42,9 +41,9 @@
 
                 <TextView
                     android:id="@+id/textView4"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{file.name}"
+                    android:text="@{file.fullName}"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
             </TableRow>
@@ -64,10 +63,10 @@
 
                 <TextView
                     android:id="@+id/textView5"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{file.status ? @string/download_success : @string/download_fail, default=@string/download_success}"
-                    android:textColor="@{file.status ? R.color.black : R.color.red, default = @color/black}"
+                    android:textColor="@{file.status ? @color/black : @color/red, default = @color/black}"
                     android:textSize="18sp" />
             </TableRow>
 
